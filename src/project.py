@@ -4,6 +4,7 @@ Execute this script directly from the command line, to view your project's
 status, execute operations and submit them to a cluster. See also:
 
     $ python src/project.py --help
+
 """
 import signac
 from flow import FlowProject, directives
@@ -23,7 +24,7 @@ class Borah(DefaultSlurmEnvironment):
     def add_args(cls, parser):
         parser.add_argument(
             "--partition",
-            default="gpu",
+            default="shortgpu",
             help="Specify the partition to submit to."
         )
 
@@ -36,7 +37,7 @@ class R2(DefaultSlurmEnvironment):
     def add_args(cls, parser):
         parser.add_argument(
             "--partition",
-            default="gpuq",
+            default="shortgpuq",
             help="Specify the partition to submit to."
         )
 
