@@ -31,13 +31,14 @@ def get_parameters():
     parameters["chain_lengths"] = [10] # int
     parameters["bead_mass"] = [100] #amu
     parameters["bond_length"] = [0.01] # nm
-    parameters["forcefield"] = ["gaff"]
     parameters["box_constraints"] = [
-            {"x": None, "y": None, "z": None}
+            {"x": None,
+             "y": None,
+             "z": None}
 	]
     parameters["kwargs"] = [
-            {"expand_factor": 10},
-           #{"n": 4, "a": 1.5, "b": 1.5}
+            {"expand_factor": 7},
+            #{"n": 4, "y": 1.5, "y": 1.5, "vector": [1,0,0]}
 	]
 
     ### SIMULATION PARAMETERS ###

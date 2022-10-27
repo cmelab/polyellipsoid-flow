@@ -91,6 +91,11 @@ def sample(job):
                 bond_length=job.sp.bond_length,
                 density=job.sp.density
         )
+        if job.sp.system_type == "pack":
+            system.pack(**job.sp.kwargs)
+        elif job.sp.system_type == "stack":
+            system.stack(**job.sp.kwargs)
+
         print("-------------------------------")
         print("Creating the simulation...")
         print("-------------------------------")
