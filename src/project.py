@@ -72,15 +72,16 @@ def sample(job):
     from polyellipsoid import System, Simulation 
     from cmeutils.gsd_utils import ellipsoid_gsd
 
+
     with job:
-        print("-----------------------")
+        print("-------------------------------")
         print("JOB ID NUMBER:")
         print(job.id)
-        print("-----------------------")
+        print("-------------------------------")
         print()
-        print("----------------------")
+        print("-------------------------------")
         print("Creating the system...")
-        print("----------------------")
+        print("-------------------------------")
         print()
         system = System(
                 n_chains=job.sp.n_chains,
@@ -90,9 +91,9 @@ def sample(job):
                 bond_length=job.sp.bond_length,
                 density=job.sp.density
         )
-        print("----------------------")
+        print("-------------------------------")
         print("Creating the simulation...")
-        print("----------------------")
+        print("-------------------------------")
         print()
         sim = Simulation(
                 system,
@@ -109,9 +110,59 @@ def sample(job):
                 gsd_write=int(job.doc.total_steps / job.sp.n_frames)
                 log_write=int(job.doc.total_steps / job.sp.n_logs)
         )
+        if all(
+                [
+                    job.sp.init_shrink_kT,
+                    job.sp.final_shrink_kT,
+                    job.sp.shrink_steps,
+                    job.sp.shrink_period,
+                ]
+        ):
+        print("-------------------------------")
+        print("Running a shrink simulation...")
+        print("-------------------------------")
+        print()
+        sim.shrink(
+                kT=job.sp.init_shrink_kT,
+                n_steps=job.sp.shrink_steps,
+                period=job.sp.shrink_period
+        )
+        print("-------------------------------")
+        print("Shrink simulation finished...")
+        print("-------------------------------")
+        print()
+
+        if job.sp.procedure == "quench":
+        print("-------------------------------")
+        print("Running a quench simulation...")
+        print("-------------------------------")
+        print()
+            sim.quench(kT=job.sp.kT_quench, n_steps=job.sp.n_steps)
+        print("-------------------------------")
+        print("Quench simulation finished...")
+        print("-------------------------------")
+        print()
+        job.doc.done = True
+
+    elif job.sp.procedure == "anneal":
+        print("-------------------------------")
+        print("Running an anneal simulation...")
+        print("-------------------------------")
+        print()
+        sim.anneal(
+                kT_init=job.sp.kT_anneal[0],
+                kT_final=job.sp.kT_anneal[1],
+                step_sequence=job.sp.anneal_sequence,
+                schedule=job.sp.schedule
+        )
+        print("-------------------------------")
+        print("Anneal simulation finished...")
+        print("-------------------------------")
+        print()
+        job.doc.done = True
+
 
     
-
 
 if __name__ == "__main__":
     MyProject().main()

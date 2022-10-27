@@ -41,9 +41,12 @@ def get_parameters():
 	]
 
     ### SIMULATION PARAMETERS ###
+    parameters["epsilon"] = [1.0]
+    parameters["lperp"] = [0.5]
+    parameters["lpar"] = [1.0]
     parameters["tau_kt"] = [0.1]
     parameters["dt"] = [0.0003]
-    parameters["r_cut"] = [2.5]
+    parameters["r_cut"] = [3.0] #nm
     parameters["sim_seed"] = [42]
     parameters["neighbor_list"] = ["Cell"]
     parameters["init_shrink_kT"] = [7]
@@ -69,6 +72,7 @@ def get_parameters():
     #        [2e5, 1e5, 3e5, 5e5, 5e5, 1e5]
     #    ]
     #parameters["schedule"] = [None]
+
     return list(parameters.keys()), list(product(*parameters.values()))
 
 
