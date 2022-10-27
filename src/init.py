@@ -26,9 +26,10 @@ def get_parameters():
             "pack",
             #"stack",
     ]
-    parameters["density"] = [1.35] #g/cm^3
-    parameters["n_chains"] = [25] # int
-    parameters["chain_lengths"] = [10] # int
+    parameters["density"] = [0.1] #g/cm^3
+    parameters["n_chains"] = [10] # int
+    parameters["chain_lengths"] = [4] # int
+    parameters["bead_length"] = [1] # int
     parameters["bead_mass"] = [100] #amu
     parameters["bond_length"] = [0.01] # nm
     parameters["box_constraints"] = [
@@ -37,7 +38,7 @@ def get_parameters():
              "z": None}
 	]
     parameters["kwargs"] = [
-            {"expand_factor": 7},
+            {"box_expand_factor": 7},
             #{"n": 4, "y": 1.5, "y": 1.5, "vector": [1,0,0]}
 	]
 
@@ -45,15 +46,18 @@ def get_parameters():
     parameters["epsilon"] = [1.0]
     parameters["lperp"] = [0.5]
     parameters["lpar"] = [1.0]
+    parameters["bond_k"] = [500]
+    parameters["angle_k"] = [10]
+    parameters["angle_theta"] = [2.0]
     parameters["tau_kt"] = [0.1]
     parameters["dt"] = [0.0003]
     parameters["r_cut"] = [3.0] #nm
     parameters["sim_seed"] = [42]
     parameters["neighbor_list"] = ["Cell"]
-    parameters["init_shrink_kT"] = [7]
-    parameters["final_shrink_kT"] = [7]
-    parameters["shrink_steps"] = [1e6]
-    parameters["shrink_period"] = [1]
+    parameters["init_shrink_kT"] = [None]
+    parameters["final_shrink_kT"] = [None]
+    parameters["shrink_steps"] = [None]
+    parameters["shrink_period"] = [None]
     parameters["procedure"] = [
             "quench",
             #"anneal"
@@ -78,7 +82,7 @@ def get_parameters():
 
 
 def main():
-    project = signac.init_project("polyellipsoid") # Set the signac project name
+    project = signac.init_project()
     param_names, param_combinations = get_parameters()
     # Create the generate jobs
     for params in param_combinations:
@@ -87,7 +91,7 @@ def main():
         parent_job.init()
         parent_job.doc.setdefault("done", False)
 
-    project.write_statepoints()
+    project.update_cache()
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)

@@ -70,7 +70,7 @@ def initialized(job):
 @MyProject.operation
 @MyProject.post(sampled)
 def sample(job):
-    from polyellipsoid import System, Simulation 
+    from polyellipsoid import System, Simulation
     from cmeutils.gsd_utils import ellipsoid_gsd
 
 
@@ -109,12 +109,12 @@ def sample(job):
                 tau=job.sp.tau_kt,
                 dt=job.sp.dt,
                 r_cut=job.sp.r_cut,
-                bond_k=job.sp.bond_k
+                bond_k=job.sp.bond_k,
                 angle_k=job.sp.angle_k,
                 angle_theta=job.sp.angle_theta,
                 seed=job.sp.sim_seed,
-                gsd_write=int(job.doc.total_steps / job.sp.n_frames)
-                log_write=int(job.doc.total_steps / job.sp.n_logs)
+                gsd_write=10000,
+                log_write=1000
         )
         if all(
                 [
@@ -124,51 +124,51 @@ def sample(job):
                     job.sp.shrink_period,
                 ]
         ):
-        print("-------------------------------")
-        print("Running a shrink simulation...")
-        print("-------------------------------")
-        print()
-        sim.shrink(
-                kT=job.sp.init_shrink_kT,
-                n_steps=job.sp.shrink_steps,
-                period=job.sp.shrink_period
-        )
-        print("-------------------------------")
-        print("Shrink simulation finished...")
-        print("-------------------------------")
-        print()
+            print("-------------------------------")
+            print("Running a shrink simulation...")
+            print("-------------------------------")
+            print()
+            sim.shrink(
+                    kT=job.sp.init_shrink_kT,
+                    n_steps=job.sp.shrink_steps,
+                    period=job.sp.shrink_period
+            )
+            print("-------------------------------")
+            print("Shrink simulation finished...")
+            print("-------------------------------")
+            print()
 
         if job.sp.procedure == "quench":
-        print("-------------------------------")
-        print("Running a quench simulation...")
-        print("-------------------------------")
-        print()
+            print("-------------------------------")
+            print("Running a quench simulation...")
+            print("-------------------------------")
+            print()
             sim.quench(kT=job.sp.kT_quench, n_steps=job.sp.n_steps)
-        print("-------------------------------")
-        print("Quench simulation finished...")
-        print("-------------------------------")
-        print()
-        job.doc.done = True
+            print("-------------------------------")
+            print("Quench simulation finished...")
+            print("-------------------------------")
+            print()
+            job.doc.done = True
 
-    elif job.sp.procedure == "anneal":
-        print("-------------------------------")
-        print("Running an anneal simulation...")
-        print("-------------------------------")
-        print()
-        sim.anneal(
-                kT_init=job.sp.kT_anneal[0],
-                kT_final=job.sp.kT_anneal[1],
-                step_sequence=job.sp.anneal_sequence,
-                schedule=job.sp.schedule
-        )
-        print("-------------------------------")
-        print("Anneal simulation finished...")
-        print("-------------------------------")
-        print()
-        job.doc.done = True
+        elif job.sp.procedure == "anneal":
+            print("-------------------------------")
+            print("Running an anneal simulation...")
+            print("-------------------------------")
+            print()
+            sim.anneal(
+                    kT_init=job.sp.kT_anneal[0],
+                    kT_final=job.sp.kT_anneal[1],
+                    step_sequence=job.sp.anneal_sequence,
+                    schedule=job.sp.schedule
+            )
+            print("-------------------------------")
+            print("Anneal simulation finished...")
+            print("-------------------------------")
+            print()
+            job.doc.done = True
 
 
-    
+
 
 if __name__ == "__main__":
     MyProject().main()
