@@ -57,7 +57,7 @@ class Fry(DefaultSlurmEnvironment):
 # Definition of project-related labels (classification)
 @MyProject.label
 def sampled(job):
-    return job.doc.get("done")
+    return job.doc.done
 
 
 @MyProject.label
@@ -131,7 +131,7 @@ def sample(job):
             sim.shrink(
                     kT=job.sp.init_shrink_kT,
                     n_steps=job.sp.shrink_steps,
-                    period=job.sp.shrink_period
+                    shrink_period=job.sp.shrink_period
             )
             print("-------------------------------")
             print("Shrink simulation finished...")
@@ -166,8 +166,6 @@ def sample(job):
             print("-------------------------------")
             print()
             job.doc.done = True
-
-
 
 
 if __name__ == "__main__":
